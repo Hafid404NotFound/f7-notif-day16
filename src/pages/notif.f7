@@ -1,0 +1,55 @@
+<template>
+  <div class="page">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="title">Notifications</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="block block-strong-ios block-outline-ios">
+        <p>Coba untuk memberikan izin untuk semua notifikasi, klik dibawah ini.</p>
+       
+        <p><a class="button button-fill" @click=${showNotificationRequestPermission}>Request Notification Permission</a></p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default (props, { $f7, $el, $on }) => {
+  let notificationFull;
+  let notificationWithButton;
+  let notificationCloseOnClick;
+
+  const showNotificationFull = () => {
+  };
+
+  const showNotificationWithButton = () => {
+  };
+
+  const showNotificationCloseOnClick = () => {
+  };
+
+  const showNotificationRequestPermission = async () => {
+    const permission = await Notification.requestPermission();
+
+    if (permission === 'granted') {
+  
+      $f7.notification.create({
+        icon: '<i class="icon icon-f7"></i>',
+        title: 'Notifications Enabled',
+        text: 'Sekarang kamu akan mendapatkan semua notifikasi di halaman ini.',
+        closeTimeout: 3000
+      }).open();
+    } else {
+      $f7.dialog.alert('Notification permission was not granted.');
+    }
+  };
+
+  $on('pageBeforeRemove', () => {
+  });
+
+  return $render;
+};
+</script>

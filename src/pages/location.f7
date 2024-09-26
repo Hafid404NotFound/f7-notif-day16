@@ -1,0 +1,32 @@
+<template>
+  <div class="page" data-name="location">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="title">Location</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div id="lokasi">Belum di set</div>
+      <button id="tombolLokasi" class="button button-fill" @click="${getLocation}">Ambil lokasi</button>
+    </div>
+  </div>
+</template>
+<script>
+  export default (props, {$store}) => {
+    const getLocation = () => {
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(showPosition)
+      } 
+      else {
+        alert("browser tidak mendukung geolocation");
+      }
+    }
+    const showPosition = (position) => {
+      var lokasi = document.getElementById("lokasi");
+      lokasi.innerHTML = "Lintang: " + position.coords.latitude + 
+      "<br> Bujur: " + position.coords.longitude;
+    }
+    return $render;
+  }
+</script>

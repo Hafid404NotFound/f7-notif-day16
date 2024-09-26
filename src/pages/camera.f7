@@ -1,0 +1,77 @@
+<template>
+  <div class="page" data-name="camera">
+    <div class="navbar">
+      <div class="navbar-bg"></div>
+      <div class="navbar-inner sliding">
+        <div class="title">Camera</div>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="camera">
+        <video id="video">Tidak ada</video>
+        <button id="startbutton" class="button button-fill" @click="${takePhoto}">Take Photo</button>
+      </div>
+      <canvas id="canvas"></canvas>
+      <div class="output">
+        <img id="photo" />
+      </div>
+      <div class="buttons">
+        <button class="button button-fill margin" @click="${downloadImage}">Download Image</button>
+       
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default (props, {$store}) => {
+  const width = 100;
+  const height = 0;
+  const streaming = false;
+  let video = null;
+  let canvas = null;
+  let photo = null;
+
+  const takePhoto = () => {
+    canvas = document.getElementById('canvas');
+    photo = document.getElementById('photo');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0);
+  };
+
+  const downloadImage = () => {
+    const imageData = canvas.toDataURL('image/png'); 
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = 'captured_image.png'; 
+    link.click();
+  };
+
+  const startup = () => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      .then(function(stream) {
+        video = document.getElementById('video');
+        video.srcObject = stream;
+        video.play();
+      })
+      .catch((err) => {
+        console.log("An error occured:", err);
+      });
+  };
+
+  if (navigator.mediaDevices) {
+    startup();
+  } else {
+    alert('Browser does not support camera');
+  }
+
+  const savedImage = localStorage.getItem('capturedImage');
+  if (savedImage) {
+    document.getElementById('photo').setAttribute('src', savedImage);
+  }
+
+  return $render;
+};
+</script>
